@@ -1,0 +1,65 @@
+#/bin/bash
+cat ~/.config/backgroundchanger/wallpaperconfig.cfg #reading config file
+
+if [ "$?" = "1" ]
+	then
+		mkdir ~/.config/backgroundchanger/ #Create config folder
+		mkdir ~/.config/backgroundchanger/img/ #create img folder 
+		cp google ~/.config/backgroundchanger/
+		background=$(zenity --list --text "how about that?" --radiolist --column "Check one" --column "Handlers" TRUE CAJA FALSE PCMANFM FALSE Nautilus FALSE "otherstuff") #Getting your background handler
+		echo "background=$background" > ~/.config/backgroundchanger/wallpaperconfig.cfg #adding background manager to config file
+		time=$(zenity --scale --text "Interval between changing wallpaper in minute" --min-value=2 --max-value=200 --value=2 --step 2)m #Getting interval
+		echo "time=$time" >> ~/.config/backgroundchanger/wallpaperconfig.cfg #Adding interval to config file
+		search=$(zenity --entry --text "Up to 2 Search Terms?" --entry-text "$background wallpaper" | sed 's/\ /+/') #Getting search terms
+		echo "search=$search" >> ~/.config/backgroundchanger/wallpaperconfig.cfg # adding search terms to config file
+		rm ~/.config/backgroundchanger/img/*
+		
+	else
+		echo "hello"
+		fi
+background=$(grep background ~/.config/backgroundchanger/wallpaperconfig.cfg  | tail  -c +12)
+time=$(grep time ~/.config/backgroundchanger/wallpaperconfig.cfg | tail -c +6)
+search=$(grep search ~/.config/backgroundchanger/wallpaperconfig.cfg | tail -c +8)
+page=1
+echo "$background $time $search"
+
+sleep 5
+cd ~/.config/backgroundchanger/img
+echo "while : do"
+while : 
+do
+
+	if [ "$(ls -A $DIR)" ]
+		then
+			wallpaper=$(ls -1 | tail -n 1)
+			echo $wallpaper		
+				mv ~/.config/backgroundchanger/img/$wallpaper ~/.config/backgroundchanger/$wallpaper
+				echo $wallpaper
+				mateconftool-2 -t str --set /desktop/mate/background/picture_filename ~/.config/backgroundchanger/$wallpaper
+				mateconftool-2 -t str --set /desktop/mate/background/picture_options stretched
+				pcmanfm --set-wallpaper ~/.config/backgroundchanger/$wallpaper --wallpaper-mode=scaled
+				gconftool-2 -t str --set /desktop/gnome/background/picture_filename ~/.config/backgroundchanger/$wallpaper
+				gconftool-2 -t str --set /desktop/gnome/background/picture_options stretched
+				zenity --notification --text "Your wallpaper has been changed" --timeout 3 --window-icon ~/.config/backgroundchanger/$wallpaper
+				sleep $time
+				echo "removing $wallpaperold"
+				rm ~/.config/backgroundchanger/$wallpaperold
+				sleep 30 #"$time"
+				wallpaperold=$wallpaper
+
+
+
+
+		else
+			echo $page
+		    page=$((page + 1))
+			echo $page			
+			bash ~/.config/backgroundchanger/google -s $search -p $page 
+			echo " ~/.config/backgroundchanger/google -s $search -p $page"
+			#An extremly unmodifide version(just a few edits) of a script by Adrien Bailly
+			#http://adrienbailly.wordpress.com/2009/10/05/automatic-download-of-images-with-google-images/
+			
+fi
+echo $page
+sleep 5
+done

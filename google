@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# TODO: command line takes arguments
+# search, color (all), number of answers
+#
+
+# Dislay help message
+function dispHelp()
+{
+echo "Google Image Retriever version $VERSION"
+echo "Usage:  gir [options]"
+echo "  -s     : specify keywords"
+echo "  -e : file extension filter (gif, jpg, png, ...)"
+echo "  -c      : dominant color: red,orange,yellow,green,teal,blue,purple,pink,white,grey,black,brown"
+echo "  -p     : page result (20 images per pages)"
+echo "  -h -help       : print usage information"
+}
+
+###############################################################################
+### Begining/Initialisation ###
+VERSION="0.1"  # Program version
+
+SEARCH=""e
+EXTENSION=""
+COLOR=""
+OFFSET=""
+
+### Input option parsing ###
+cd ~/.config/backgroundchanger/img
+while getopts ":s:e:c:p:h" opt; do
+case $opt in
+s)
+SEARCH=${OPTARG}
+;;
+e)
+EXTENSION=${OPTARG}
+;;
+c)
+COLOR=${OPTARG}
+;;
+p)
+OFFSET=`echo ${OPTARG}*20 | bc`
+;;
+h|help)
+if [ $# = 3 ]
+then
+echo "Too much arguments with -h option: use -h for help"
+exit -1
+fi
+dispHelp
+exit 0
+;;
+\?)
+echo "Invalid option: -${OPTARG}" >&2
+;;
+esac
+done
+
+# download google page result
+cmd="wget -U midori -O - http://images.google.com/images?q=${SEARCH}\&imgcolor=${COLOR}\&start=${OFFSET}\&as_filetype=${EXTENSION}"
+cmd="${cmd} | tr \"?&\" \"\\n\""
+cmd="${cmd} | grep imgurl"
+cmd="${cmd} | tr \"=\" \"\\n\""
+cmd="${cmd} | grep http"
+cmd="${cmd} | wget -U firefox -i -" # user agent: Firefox, read from pipeline
+eval "${cmd}"
+
+# remove identical files
+rm *.?
+rm *.??
+rm *.html.?
+rm *.html.??
+

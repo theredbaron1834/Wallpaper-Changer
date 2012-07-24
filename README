@@ -1,0 +1,3 @@
+Just run wallpaper, it creates a background folder in your .config and moves "google" there.
+
+To uninstall, just delete wallpaper and the ~/.confgi/background folder.
