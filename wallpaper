@@ -41,10 +41,10 @@ do
 				gconftool-2 -t str --set /desktop/gnome/background/picture_filename ~/.config/backgroundchanger/$wallpaper
 				gconftool-2 -t str --set /desktop/gnome/background/picture_options stretched
 				zenity --notification --text "Your wallpaper has been changed" --timeout 3 --window-icon ~/.config/backgroundchanger/$wallpaper
-				sleep $time
+				sleep 30
 				echo "removing $wallpaperold"
 				rm ~/.config/backgroundchanger/$wallpaperold
-				sleep 30 #"$time"
+				sleep $time
 				wallpaperold=$wallpaper
 
 
