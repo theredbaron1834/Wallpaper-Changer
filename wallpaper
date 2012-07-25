@@ -5,27 +5,25 @@ if [ "$?" = "1" ]
 	then
 		mkdir ~/.config/backgroundchanger/ #Create config folder
 		mkdir ~/.config/backgroundchanger/img/ #create img folder 
-		mv google ~/.config/backgroundchanger/
-		mv deviantart ~/.config/backgroundchanger/
+		mv engines ~/.config/backgroundchanger/
 #		background=$(zenity --list --text "how about that?" --radiolist --column "Check one" --column "Handlers" TRUE CAJA FALSE PCMANFM FALSE Nautilus ) #Getting your background handler # Not used yet.
 #		echo "background=$background" > ~/.config/backgroundchanger/wallpaperconfig.cfg #adding background manager to config file
 		time=$(zenity --scale --text "Interval between changing wallpaper in minute" --min-value=2 --max-value=200 --value=2 --step 2)m #Getting interval
 		echo "time=$time" >> ~/.config/backgroundchanger/wallpaperconfig.cfg #Adding interval to config file
 		search=$(zenity --entry --text "Up to 2 Search Terms?" --entry-text "wallpaper" | sed 's/\ /+/') #Getting search terms
 		echo "search=$search" >> ~/.config/backgroundchanger/wallpaperconfig.cfg # adding search terms to config file
-		engines=$(zenity  --list  --text "What engines do you want to use?" --checklist  --column "Pick" --column "options" TRUE "Google" TRUE "Deviantart" --separator="\n")
+		engines=$(zenity  --list  --text "What engines do you want to use?" --checklist  --column "Pick" --column "options" TRUE "Google" TRUE "Deviantart" TRUE "Animegalleries" --separator="\n")
 		 echo "$engines" >> ~/.config/backgroundchanger/wallpaperconfig.cfg
 		rm ~/.config/backgroundchanger/img/*
-		
-	else
-		echo "hello"
 		fi
+
 rm ~/.config/backgroundchanger/img/*
 #background=$(grep background ~/.config/backgroundchanger/wallpaperconfig.cfg  | tail  -c +12)
 time=$(grep time ~/.config/backgroundchanger/wallpaperconfig.cfg | tail -c +6)
 search=$(grep search ~/.config/backgroundchanger/wallpaperconfig.cfg | tail -c +8)
 google=$(grep Google ~/.config/backgroundchanger/wallpaperconfig.cfg)
 deviantart=$(grep Deviantart ~/.config/backgroundchanger/wallpaperconfig.cfg)
+animegalleries=$(grep Animegalleries ~/.config/backgroundchanger/wallpaperconfig.cfg)
 page=0
 
 sleep 5
@@ -61,19 +59,23 @@ do
 			echo $page
 			if [ "$google" = "Google" ]
 				then
-				echo Google
-				sleep 5				
-				bash ~/.config/backgroundchanger/google -s $search -p $page 
+				echo "Google start"
+				bash ~/.config/backgroundchanger/engines/google.eng -s $search -p $page 
 				#An extremly unmodifide version(just a few edits) of a script by Adrien Bailly
 				#http://adrienbailly.wordpress.com/2009/10/05/automatic-download-of-images-with-google-images/
+				echo "Google end"
 				fi
 			if [ "$deviantart" = "Deviantart" ]
 				then
-				echo Deviantart
-				sleep 5
-				bash ~/.config/backgroundchanger/deviantart $search $page
-				echo Devaintartexit
-				sleep 10
+				echo "Deviantart start"
+				bash ~/.config/backgroundchanger/engines/deviantart.eng $search $page
+				echo "Devaintart end"
+				fi
+			if [ "$animegalleries" = "Animegalleries" ]
+				then
+				echo "Anime Galleries Start"
+				bash ~/.config/backgroundchanger/engines/animegalleries.eng $search $page
+				echo "Anime Galleries End"	
 				fi
 fi
 done

@@ -2,7 +2,7 @@ Just run wallpaper, it creates a background folder in your .config and moves the
 
 To uninstall, just delete wallpaper and the ~/.config/background folder.
 
-This script will search Google/Deviantart for you, and set the image as your backround at intervals of 2-200 minutes.
+This script will search Google/Deviantart/AnimeGalleries for you, and set the image as your backround at intervals of 2-200 minutes.
 Currently works with:
 
 Caja

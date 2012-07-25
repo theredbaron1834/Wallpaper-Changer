@@ -1,0 +1,18 @@
+#!/bin/bash
+#usage = file searchterms page
+###$1 = search paramaters
+###$2 = page
+cd ~/.config/backgroundchanger/img
+echo first=$1
+echo second=$2
+
+wget -U midori -O ~/.config/backgroundchanger/img/animegall.html --cookies=on --keep-session-cookies --save-cookies=cookie.txt "http://www.animegalleries.net/thumbnails.php?album=search&type=full&search=$1" #Need to have cookies saying you searched for X before you can go to another page.
+rm animegall.html
+
+wget -U midori -O ~/.config/backgroundchanger/img/animegall.html --cookies=on --keep-session-cookies --load-cookies=cookie.txt "http://www.animegalleries.net/album/search/category/0/page/$2"
+
+sed "s/\ /\n/g" ~/.config/backgroundchanger/img/animegall.html | grep "src=\"http://media.animegalleries.net" | sed -e 's/src="//g' -e 's/"//g' -e 's/thumb_//g' > ~/.config/backgroundchanger/img/urls.txt
+wget -i ~/.config/backgroundchanger/img/urls.txt
+rm cookie.txt
+rm ~/.config/backgroundchanger/img/animegall.html
+rm ~/.config/backgroundchanger/img/urls.txt
