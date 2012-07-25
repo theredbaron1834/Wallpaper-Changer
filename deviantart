@@ -1,18 +1,9 @@
 #!/bin/bash
-
-
 #usage = file searchterms page
-
-cd ~/.config/backgroundchanger/img
-
-
 ###$1 = search paramaters
 ###$2 = offset
-echo $2
+cd ~/.config/backgroundchanger/img
 page=$(expr $2 \* 24)
-
-sleep 5
-
 wget -U midori -O ~/.config/backgroundchanger/img/deviant.html "http://browse.deviantart.com/?order=9&q=$1&offset=$page"
 sleep 1
 sed "s/\ /\n/g" ~/.config/backgroundchanger/img/deviant.html | grep super_img | sed -e 's/super_img="//g' -e 's/"//g' > ~/.config/backgroundchanger/img/urls.txt

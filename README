@@ -1,3 +1,14 @@
-Just run wallpaper, it creates a background folder in your .config and moves "google" there.
+Just run wallpaper, it creates a background folder in your .config and moves the engine subscripts there.
 
 To uninstall, just delete wallpaper and the ~/.config/background folder.
+
+This script will search Google/Deviantart for you, and set the image as your backround at intervals of 2-200 minutes.
+Currently works with:
+
+Caja
+Nautilus
+PCmanFM
+Feh
+Xfce
+
+If anybody wants another one, ask and I will "try" to get it to work.

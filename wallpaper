@@ -44,6 +44,8 @@ do
 				pcmanfm --set-wallpaper ~/.config/backgroundchanger/$wallpaper --wallpaper-mode=scaled
 				gconftool-2 -t str --set /desktop/gnome/background/picture_filename ~/.config/backgroundchanger/$wallpaper
 				gconftool-2 -t str --set /desktop/gnome/background/picture_options stretched
+				feh --bg-scale ~/.config/backgroundchanger/$wallpaper
+				xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/image-path -s ~/.config/backgroundchanger/$wallpaper
 				zenity --notification --text "Your wallpaper has been changed" --timeout 3 --window-icon ~/.config/backgroundchanger/$wallpaper
 				sleep 30
 				echo "removing $wallpaperold"
